@@ -11,6 +11,8 @@
   "dependencies": {
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
-    "request": "^2.88.0"
+    "mysql2": "^1.6.5",
+    "request": "^2.88.0",
+    "sequelize": "^5.7.5"
   }
 }
