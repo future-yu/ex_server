@@ -10,9 +10,9 @@ const mysql_config={
         port: 3306,
         protocol: 'tcp',
         // disable logging; default: console.log
-        logging: true,
+        logging: console.log,
         omitNull: true,
-
+        timestamps: false,
         // similar for sync: you can define this to always force sync for models
         // sync: { force: true },
 
