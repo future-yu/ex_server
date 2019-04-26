@@ -6,7 +6,7 @@ const {
     INTEGER,
     BOOLEAN
 } = Sequelize;
-let User = sequelize.define('user', {
+let User = sequelize.define('User', {
     id:{
         type:INTEGER,
         autoIncrement: true,

@@ -1,12 +1,13 @@
-let {Image,Permission,Post,Tag,User} = require('../model');
+let {Image,Permission,Post,Tag,User,Artist,Group} = require('../model');
 
-
+//
 // Image.sync({force:true});
 // Permission.sync({force:true});
 // Tag.sync({force:true});
 // Post.sync({force:true});
 // User.sync({force:true});
-
+// Artist.sync({force:true});
+// Group.sync({force:true});
 //
 // Image.create({
 //     path:'/images/test.jpg',
@@ -38,9 +39,9 @@ let {Image,Permission,Post,Tag,User} = require('../model');
 // })
 
 // Permission.findByPk(2).then((data)=>{
-    User.findByPk(4).then(user=>{
-        user.getPermissions().then((res)=>{
-            debugger
-        })
-    });
+//     User.findByPk(4).then(user=>{
+//         user.getPermissions().then((res)=>{
+//             debugger
+//         })
+//     });
 // });
