@@ -6,12 +6,21 @@ const HEADER = {
     'Upgrade-Insecure-Requests': 1,
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.108 Safari/537.36'
 };
-
+const TAG_MAP_DB={
+    Parodies:'Parodies',
+    Characters:'Characters',
+    Tags:'PostTags',
+    Artists:'Artists',
+    Groups:'Groups',
+    Languages:'Languages',
+    Categories:'Categories'
+}
 module.exports = {
     exhentai: 'https://exhentai.org',
     nhentai: 'https://nhentai.net',
     nhsearch:'https://nhentai.net/search/',
     exlogin: 'https://forums.e-hentai.org/index.php?act=Login&CODE=01',
     expires: 6000 * 60 * 24 * 12 * 100,
-    HEADER
+    HEADER,
+    TAG_MAP_DB
 };

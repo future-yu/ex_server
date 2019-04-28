@@ -1,8 +1,16 @@
-let Router = require('koa-router');
-let router = new Router();
+let {dealNhPage} = require('../server/deal-remote-page');
+let {getPost} = require('../server/deal-db-save');
+async function dealPage(ctx,next) {
+    try {
+        let page_data = await dealNhPage(ctx.params.page_num);
 
-router.get('/',async (ctx)=>{
-    ctx.body = 'xxx';
-});
+        ctx.body = await getPost(page_data);
+    }catch (e) {
+        console.log(e)
+    }
 
-module.exports = router;
+}
+
+module.exports ={
+    dealPage
+};

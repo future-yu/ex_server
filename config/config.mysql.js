@@ -8,15 +8,6 @@ const mysql_config={
         dialect: 'mysql',
         host: 'localhost',
         port: 3306,
-        protocol: 'tcp',
-        // disable logging; default: console.log
-        logging: console.log,
-        omitNull: true,
-        timestamps: false,
-        // similar for sync: you can define this to always force sync for models
-        // sync: { force: true },
-
-        // pool configuration used to pool database connections
         pool: {
             max: 5,
             idle: 30000,
