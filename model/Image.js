@@ -13,9 +13,13 @@ let Image = sequelize.define('Image',{
     },
     path:{
         type:STRING,
-        allowNull:false
+        allowNull:true
     },
     remote_url:{
+        type:STRING,
+        allowNull:true
+    },
+    target_url:{
         type:STRING,
         allowNull:true
     },

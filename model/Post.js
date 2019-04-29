@@ -1,6 +1,5 @@
 let sequelize = require('../config/config.mysql');
 let Sequelize = require('sequelize');
-const Image  = require('./Image');
 const {
     STRING,
     INTEGER,
@@ -25,5 +24,4 @@ let Post = sequelize.define('Post',{
         allowNull: true
     }
 });
-//thumb_img
 module.exports = Post;
