@@ -20,8 +20,8 @@ async function savePost(data) {
                     remote_url: item.href,
                     describe: item.title,
                     thumb: {
-                        path: img_path + '_thumb',
-                        remote_url: item.thumb_url,
+                        path_thumb: img_path + '_thumb',
+                        thumb_url: item.thumb_url,
                         describe: item.title
                     }
                 }, {
@@ -56,7 +56,7 @@ async function getPost(data) {
                 include: [{
                     model: Image,
                     as: 'thumb',
-                    attributes: ['path', 'remote_url']
+                    attributes: ['path_thumb', 'thumb_url']
                 }]
             })
         )
@@ -86,29 +86,78 @@ async function getPost(data) {
 
 async function savePostDetail(data_detail) {
     let post = await Post.findByPk(data_detail.post_id);
-
-    let artist_pro = [];
-    let group_pro = [];
-    let img_pro = data_detail['allImages'].map(item=>{
-       return Image.create({
-           path:null,
-           remote_url:item===undefined?null:item
-       })
+    let image_db = data_detail['ThumbImages'].map((item, index) => {
+        return {
+            path_thumb: null,
+            thumb_url: item.target_url,
+            target_url: item.img_url
+        }
     });
-    let thumb_pro = data_detail['ThumbImages'].map(item=>{
-        return Image.create({
-            path:null,
-            remote_url:item.img_url,
-            target_url:item.target_url
-        })
-    });
-    for (let key in data_detail['tag']){
+    let work_images = await Image.bulkCreate(image_db);
+    post.addWorkImages(work_images);
+    for (let key in data_detail['tag']) {
+        let tag_value = data_detail['tag'][key];
+        switch (key) {
+            case 'Artists':
+                let artists = await Promise.all(tag_value.map(item => {
+                    return Artist.findOrCreate({
+                        where: {
+                            name: item
+                        },
+                        defaults: {
+                            name: item
+                        }
+                    })
+                }));
+                post.addArtists(artists);
+                artists = artists.map(item=>{
+                    return item[0]
+                });
+                artists.forEach((artist) => {
+                    artist.addArtistWorks(post);
+                });
 
-    }
-    switch (data_detail) {
+                break;
+            case 'Groups':
+                let groups = await Promise.all(tag_value.map(item => {
+                    return Group.findOrCreate({
+                        where: {
+                            name: item
+                        },
+                        defaults: {
+                            name: item
+                        }
+                    })
+                }));
+                groups = groups.map(item=>{
+                    return item[0]
+                });
+                post.addGroups(groups);
+                groups.forEach((group) => {
+                    group.addGroupWorks(post);
+                });
+                break;
+            default:
+                let tags = await Promise.all(tag_value.map(item => {
+                    return Tag.findOrCreate({
+                        where: {
+                            title: item
+                        },
+                        defaults: {
+                            title: item
+                        }
+                    })
+                }));
+                tags = tags.map(item=>{
+                    return item[0];
+                });
+                post['add' + key](tags);
+                tags.forEach((tag) => {
+                    tag.addTagPosts(post)
+                })
 
+        }
     }
-    debugger
 }
 
 module.exports = {

@@ -5,6 +5,7 @@ let Tag = require('./Tag');
 let User = require('./User');
 let Artist = require('./Artist');
 let Group = require('./Group');
+
 //---------------------------------------------
 //用户的头像
 User.belongsTo(Image,{constraints:false,as:'avatar'});
@@ -77,19 +78,14 @@ Post.hasMany(Tag,{
     as:'Languages'
 });
 
-//帖子的缩略图
+//帖子图片
 Post.hasMany(Image,{
-    foreignKey:'thumb_image',
+    foreignKey:'work_image',
     constraints:false,
-    as:'ThumbImages'
+    as:'WorkImages'
 });
 
-//帖子的内容
-Post.hasMany(Image,{
-    foreignKey:'full_image',
-    constraints:false,
-    as:'FullImages'
-});
+
 
 //帖子的作者
 Post.hasMany(Artist,{

@@ -1,7 +1,7 @@
 let {Image,Permission,Post,Tag,User,Artist,Group} = require('../model');
 
 //
-
+//
 // Image.sync({force:false});
 // Permission.sync({force:false});
 // Tag.sync({force:false});

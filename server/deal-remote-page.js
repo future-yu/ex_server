@@ -42,29 +42,28 @@ async function dealNhDetail(post_id) {
     let detail_html = null;
     let res_data = null;
     let post_intro = await Post.findByPk(post_id, {
-        attributes: ['remote_url'],
+        attributes: ['remote_url','title'],
         include: [{
             model: Image,
             as: 'thumb',
-            attributes: ['path', 'remote_url']
+            attributes: ['path_thumb', 'thumb_url']
         }]
     });
     try {
-        let images = await post_intro.getFullImages();
-
+        let images =  await post_intro.getWorkImages({where:{
+                work_image:76
+            },attributes: ['thumb_url']});
+debugger
     } catch (e) {
-        detail_html = await get(post_intro.remote_url);
-        res_data = HtmlParser.parseNhDetail(detail_html);
-        let img_pro = res_data.ThumbImages.map((item)=>{
-            return get(nhentai+item.img_url);
-        });
-        let img_detail = HtmlParser.parseNhImage(await Promise.all(img_pro));
-        res_data.allImages = img_detail;
-        return res_data;
+        console.log(e)
+        // detail_html = await get(post_intro.remote_url);
+        // res_data = HtmlParser.parseNhDetail(detail_html);
+        // return Object.assign({},res_data,post_intro.dataValues);
     }
 }
 
-// dealNhDetail(1)
+
+dealNhDetail(76)
 // dealNhPage();
 
 module.exports = {

@@ -11,14 +11,27 @@ let Image = sequelize.define('Image',{
         autoIncrement: true,
         primaryKey: true
     },
-    path:{
+    //缩略图本地路径
+    path_thumb:{
         type:STRING,
         allowNull:true
     },
-    remote_url:{
+    //全图本地路径
+    path_full:{
         type:STRING,
         allowNull:true
     },
+    //缩略图的网络地址
+    thumb_url:{
+        type:STRING,
+        allowNull:true
+    },
+    //全图的网络地址
+    full_url:{
+        type:STRING,
+        allowNull:true
+    },
+    //全图所在网页
     target_url:{
         type:STRING,
         allowNull:true
