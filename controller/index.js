@@ -1,6 +1,9 @@
 let {dealNhPage,dealNhDetail} = require('../server/deal-remote-page');
 let {getPost,savePostDetail,dbTableCreate} = require('../server/deal-db-save');
 const {nhentai,USERNAME,PASSWORD} = require('../config/config.server');
+const fs = require('fs')
+const path = require('path')
+
 async function dealPage(ctx,next) {
     try {
         let page_data = await dealNhPage(ctx.params.page_num);
@@ -43,8 +46,13 @@ async function createTables(ctx,next){
     }
 }
 
+
+async function renderPage(ctx,next){
+    ctx.body = fs.readFileSync(path.join(__dirname,'../public/index.html'))
+}
 module.exports ={
     dealPage,
     dealDetail,
-    createTables
+    createTables,
+    renderPage
 };
