@@ -1,4 +1,4 @@
-let {Image,Permission,Post,Tag,User,Artist,Group} = require('../model');
+let {Image,Permission,Post,Tag,User,Artist,Group} = require('../models');
 
 //
 //

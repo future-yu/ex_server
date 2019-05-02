@@ -1,6 +1,6 @@
 let {HEADER, nhsearch, nhentai, FNNAME} = require('../config/config.server');
 const HtmlParser = require('../utils/html-parser');
-const {Post, Image, Artist, Group, Tag} = require('../model');
+const {Post, Image, Artist, Group, Tag} = require('../models');
 
 
 let request = require('request');

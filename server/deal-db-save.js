@@ -1,4 +1,4 @@
-const {Post, Tag, Artist, Group, Image,User,Permission} = require('../model');
+const {Post, Tag, Artist, Group, Image,User,Permission} = require('../models');
 let {getDigest} = require('../utils/crypto_md5');
 const fs = require('fs');
 const request = require('request');
