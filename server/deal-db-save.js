@@ -1,4 +1,4 @@
-const {Post, Tag, Artist, Group, Image} = require('../model');
+const {Post, Tag, Artist, Group, Image,User,Permission} = require('../model');
 let {getDigest} = require('../utils/crypto_md5');
 const fs = require('fs');
 const request = require('request');
@@ -70,7 +70,7 @@ async function getPost(data) {
         } else {
             let dataValues = item['dataValues'];
             res.push({
-                img_url: [dataValues['Image']['dataValues']['path'], dataValues['Image']['dataValues']['remote_url']],
+                img_url: [dataValues['thumb']['dataValues']['path_thumb'], dataValues['thumb']['dataValues']['thumb_url']],
                 img_title: dataValues['title'],
                 post_info: dataValues['id']
             })
@@ -86,11 +86,10 @@ async function getPost(data) {
 
 async function savePostDetail(data_detail) {
     let post = await Post.findByPk(data_detail.post_id);
-    let image_db = data_detail['ThumbImages'].map((item, index) => {
+    let image_db = data_detail['images'].map((item, index) => {
         return {
-            path_thumb: null,
-            thumb_url: item.target_url,
-            target_url: item.img_url
+            thumb_url: item.thumb_url,
+            target_url: item.target_url
         }
     });
     let work_images = await Image.bulkCreate(image_db);
@@ -160,10 +159,27 @@ async function savePostDetail(data_detail) {
     }
 }
 
+async function dbTableCreate(){
+    try {
+        Image.sync({force: false});
+        Permission.sync({force: false});
+        Tag.sync({force: false});
+        Group.sync({force: false});
+        Artist.sync({force: false});
+        Post.sync({force: false});
+        User.sync({force: false});
+        return true;
+
+    }catch (e) {
+        return false;
+    }
+}
+
 module.exports = {
     savePost,
     getPost,
-    savePostDetail
+    savePostDetail,
+    dbTableCreate
 };
 
 

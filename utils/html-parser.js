@@ -44,15 +44,15 @@ class HtmlParser{
             }
 
         });
-        let thumb_img = [];
+        let images = [];
         $('.thumb-container>a').each((index,item)=>{
-            thumb_img.push({
-                img_url:$(item).attr('href'),
-                target_url:$(item).find('img').attr('data-src')
+            images.push({
+                target_url:$(item).attr('href'),
+                thumb_url:$(item).find('img').attr('data-src')
             });
 
         });
-        allData['ThumbImages'] = thumb_img;
+        allData['images'] = images;
         return allData;
     }
     static parseNhImage(htmlArr){

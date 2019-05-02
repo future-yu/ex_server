@@ -1,7 +1,9 @@
 let Router = require('koa-router');
 
 let router = new Router();
-let {dealPage,dealDetail} = require('./controller')
+let {dealPage,dealDetail,createTables} = require('./controller');
+
+router.post('/project/table',createTables)
 
 router.get('/post/page/:page_num',dealPage);
 

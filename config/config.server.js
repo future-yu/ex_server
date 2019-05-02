@@ -14,7 +14,8 @@ const TAG_MAP_DB={
     Groups:'Groups',
     Languages:'Languages',
     Categories:'Categories'
-}
+};
+const FNNAME=['Parodies','Characters','PostTags','Artists','Groups','Languages','Categories','FemaleDes','MaleDes','Misc']
 module.exports = {
     exhentai: 'https://exhentai.org',
     nhentai: 'https://nhentai.net',
@@ -22,5 +23,9 @@ module.exports = {
     exlogin: 'https://forums.e-hentai.org/index.php?act=Login&CODE=01',
     expires: 6000 * 60 * 24 * 12 * 100,
     HEADER,
-    TAG_MAP_DB
+    TAG_MAP_DB,
+    FNNAME,
+    USERNAME:'shiyu',
+    PASSWORD:'123456'
+
 };

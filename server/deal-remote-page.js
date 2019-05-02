@@ -1,4 +1,4 @@
-let {HEADER, nhsearch, nhentai} = require('../config/config.server');
+let {HEADER, nhsearch, nhentai, FNNAME} = require('../config/config.server');
 const HtmlParser = require('../utils/html-parser');
 const {Post, Image, Artist, Group, Tag} = require('../model');
 
@@ -41,8 +41,8 @@ async function dealNhPage(page_num) {
 async function dealNhDetail(post_id) {
     let detail_html = null;
     let res_data = null;
-    let post_intro = await Post.findByPk(post_id, {
-        attributes: ['remote_url','title'],
+    let post = await Post.findByPk(post_id, {
+        attributes: ['remote_url', 'title', 'id'],
         include: [{
             model: Image,
             as: 'thumb',
@@ -50,20 +50,37 @@ async function dealNhDetail(post_id) {
         }]
     });
     try {
-        let images =  await post_intro.getWorkImages({where:{
-                work_image:76
-            },attributes: ['thumb_url']});
-debugger
+        let tag_pro = FNNAME.map(item => {
+            return post['get' + item]()
+        });
+        tag_pro.push(post.getWorkImages({attributes: ['thumb_url', 'path_thumb']}));
+        let allInfos = await Promise.all(tag_pro);
+        let allData = post.dataValues;
+        allData['tag'] = {};
+        FNNAME.forEach((item, index) => {
+            if (allInfos[index].length > 0) {
+                allData['tag'][item] = allInfos[index].map(item=>{
+                    return item['dataValues']['title']||item['dataValues']['name']
+                })
+
+            }
+        });
+        allData['images']=allInfos[FNNAME.length].map(item=>{
+            return item['dataValues']
+        });
+        if(allData['images'].length==0){
+            detail_html = await get(post.remote_url);
+            res_data = HtmlParser.parseNhDetail(detail_html);
+            Object.assign(allData,res_data)
+        }
+        return allData;
     } catch (e) {
-        console.log(e)
-        // detail_html = await get(post_intro.remote_url);
-        // res_data = HtmlParser.parseNhDetail(detail_html);
-        // return Object.assign({},res_data,post_intro.dataValues);
+
     }
 }
 
 
-dealNhDetail(76)
+// dealNhDetail(1)
 // dealNhPage();
 
 module.exports = {
