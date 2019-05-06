@@ -55,12 +55,12 @@ class HtmlParser{
         allData['images'] = images;
         return allData;
     }
-    static parseNhImage(htmlArr){
-        return htmlArr.map((html)=>{
-            let $ = cheerio.load(html);
-            return $('#image-container img').attr('src')
-        });
+    //解析大图
+    static parseNhImage(html){
+        let $ = cheerio.load(html);
+
     }
+
 }
 
 module.exports = HtmlParser;

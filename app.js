@@ -15,10 +15,8 @@ switch (process.env.NODE_ENV) {
         break;
     case 'prod':
         configs = require('./config/config.prod');
-
         break;
     default:
-
 }
 
 

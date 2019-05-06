@@ -85,6 +85,9 @@ async function getPost(data) {
 }
 
 async function savePostDetail(data_detail) {
+    if(data_detail.hadInfo){
+        return data_detail;
+    }
     let post = await Post.findByPk(data_detail.post_id);
     let image_db = data_detail['images'].map((item, index) => {
         return {
@@ -93,6 +96,7 @@ async function savePostDetail(data_detail) {
         }
     });
     let work_images = await Image.bulkCreate(image_db);
+
     post.addWorkImages(work_images);
     for (let key in data_detail['tag']) {
         let tag_value = data_detail['tag'][key];
@@ -157,6 +161,11 @@ async function savePostDetail(data_detail) {
 
         }
     }
+    data_detail.images = data_detail.images.map((item,index)=>{
+        item['id'] = work_images[index]['dataValues']['id']
+        return item;
+    });
+    return data_detail;
 }
 
 async function dbTableCreate(){

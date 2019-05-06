@@ -1,9 +1,9 @@
 let {HEADER, nhsearch, nhentai, FNNAME,PROXY_URL} = require('../config/config.server');
 const HtmlParser = require('../utils/html-parser');
 const {Post, Image, Artist, Group, Tag} = require('../models');
-
-
+let {Op} = require('sequelize');
 let request = require('request');
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 function get(url, data,headers=null) {
     return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ function get(url, data,headers=null) {
             gzip: true,
             qs: data,
             useQuerystring: true,
-            proxy:PROXY_URL
+            // proxy:PROXY_URL
         }, function (error, response, body) {
             if (error) {
                 reject(error)
@@ -54,9 +54,10 @@ async function dealNhDetail(post_id) {
         let tag_pro = FNNAME.map(item => {
             return post['get' + item]()
         });
-        tag_pro.push(post.getWorkImages({attributes: ['thumb_url', 'path_thumb']}));
+        tag_pro.push(post.getWorkImages({attributes: ['thumb_url', 'path_thumb','id']}));
         let allInfos = await Promise.all(tag_pro);
         let allData = post.dataValues;
+        allData['hadInfo']=true;
         allData['tag'] = {};
         FNNAME.forEach((item, index) => {
             if (allInfos[index].length > 0) {
@@ -70,21 +71,67 @@ async function dealNhDetail(post_id) {
             return item['dataValues']
         });
         if(allData['images'].length==0){
+            allData['hadInfo']=false;
             detail_html = await get(post.remote_url);
             res_data = HtmlParser.parseNhDetail(detail_html);
+            res_data.images = res_data.images.map(item => {
+                item.target_url = nhentai + item.target_url;
+                return item;
+            });
             Object.assign(allData,res_data)
         }
         return allData;
     } catch (e) {
-
+        throw  e;
     }
 }
 
+async function getAllFullImg(){
+    try {
+        let all_target_db = await Image.findAll({
+            attributes:['target_url','id'],
+            where:{
+                target_url:{
+                    [Op.not]: null,
+                },
+                full_url:{
+                    [Op.eq]: null,
+                }
+            }
+        });
+        let all_target = all_target_db.map(item=>{
+            return {
+                url:item['dataValues']['target_url'],
+                id:item['dataValues']['id']
+            }
+        });
+        let full_pro = all_target.map((item)=>{
+            return get(item['url']).then((html)=>{
+                let data = HtmlParser.parseNhImage(html);
+                return Image.update({
+                    full_url:data.url
+                },{
+                    where: {
+                        id:item.id
+                    }
+                })
+            });
+        });
+        Promise.all(full_pro);
+    }catch (e) {
 
-// dealNhDetail(1)
+    }
+}
+getAllFullImg()
+
+// dealNhDetail(1).then(data=>{
+//     debugger
+// }).catch(err=>{
+//     debugger
+// })
 // dealNhPage();
 
 module.exports = {
     dealNhPage,
-    dealNhDetail
+    dealNhDetail,
 };
