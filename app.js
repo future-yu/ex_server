@@ -6,6 +6,9 @@ let cors = require('koa2-cors');
 let http = require('http');
 let configs = null;
 
+//设置隧道
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 switch (process.env.NODE_ENV) {
     case 'dev':
         configs = require('./config/config.dev');

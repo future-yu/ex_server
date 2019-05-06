@@ -161,15 +161,14 @@ async function savePostDetail(data_detail) {
 
 async function dbTableCreate(){
     try {
-        Image.sync({force: false});
-        Permission.sync({force: false});
-        Tag.sync({force: false});
-        Group.sync({force: false});
-        Artist.sync({force: false});
-        Post.sync({force: false});
-        User.sync({force: false});
+        Image.sync({force: true});
+        Permission.sync({force: true});
+        Tag.sync({force: true});
+        Group.sync({force: true});
+        Artist.sync({force: true});
+        Post.sync({force: true});
+        User.sync({force: true});
         return true;
-
     }catch (e) {
         return false;
     }

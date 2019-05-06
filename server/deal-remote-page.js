@@ -1,19 +1,20 @@
-let {HEADER, nhsearch, nhentai, FNNAME} = require('../config/config.server');
+let {HEADER, nhsearch, nhentai, FNNAME,PROXY_URL} = require('../config/config.server');
 const HtmlParser = require('../utils/html-parser');
 const {Post, Image, Artist, Group, Tag} = require('../models');
 
 
 let request = require('request');
 
-function get(url, data) {
+function get(url, data,headers=null) {
     return new Promise((resolve, reject) => {
         request({
             url: url,
             method: 'GET',
-            headers: HEADER,
+            headers: headers||HEADER,
             gzip: true,
             qs: data,
-            useQuerystring: true
+            useQuerystring: true,
+            proxy:PROXY_URL
         }, function (error, response, body) {
             if (error) {
                 reject(error)
@@ -30,7 +31,7 @@ async function dealNhPage(page_num) {
             q: 'chinese',
             page: page_num
         });
-        let res_data = HtmlParser.parseNHentai(res_html)
+        let res_data = HtmlParser.parseNHentai(res_html);
         return res_data;
     } catch (e) {
         throw e;
@@ -86,4 +87,4 @@ async function dealNhDetail(post_id) {
 module.exports = {
     dealNhPage,
     dealNhDetail
-}
+};
