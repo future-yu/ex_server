@@ -24,7 +24,7 @@ const PROXY = {
         password: 'd4e4a0bcacf99b57ae5dbada0dcb3c6e'
     }
 };
-const PROXY_URL = `https://${encodeURIComponent(PROXY.auth.username)}:${PROXY.auth.password}@${PROXY.host}:${PROXY.port}`;
+const PROXY_URL = `https://${PROXY.auth.username}:${PROXY.auth.password}@${PROXY.host}:${PROXY.port}`;
 const FNNAME = ['Parodies', 'Characters', 'PostTags', 'Artists', 'Groups', 'Languages', 'Categories', 'FemaleDes', 'MaleDes', 'Misc']
 module.exports = {
     exhentai: 'https://exhentai.org',
